@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HappyGetOpt", "HappyGetOpt\HappyGetOpt.csproj", "{2BC3C94A-5F5C-4978-8B68-04947B9C8FE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HappyGetOpt.Test", "HappyGetOpt.Test\HappyGetOpt.Test.csproj", "{D3C8176B-2337-49B1-8A64-3189C8FA9F7C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BC3C94A-5F5C-4978-8B68-04947B9C8FE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BC3C94A-5F5C-4978-8B68-04947B9C8FE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BC3C94A-5F5C-4978-8B68-04947B9C8FE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BC3C94A-5F5C-4978-8B68-04947B9C8FE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3C8176B-2337-49B1-8A64-3189C8FA9F7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3C8176B-2337-49B1-8A64-3189C8FA9F7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3C8176B-2337-49B1-8A64-3189C8FA9F7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3C8176B-2337-49B1-8A64-3189C8FA9F7C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
