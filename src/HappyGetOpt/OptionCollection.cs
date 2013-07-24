@@ -8,9 +8,9 @@ namespace HappyGetOpt
     {
         readonly IList<Option> _options = new List<Option>();
 
-        public void Add(string longOptionName, char shortOptionName, IAction action, OptionRequired require, Following following)
+        public void Add(string longOptionName, char shortOptionName, OptionRequired require, Following following)
         {
-            Option option = new Option(longOptionName, shortOptionName, action, require, following);
+            Option option = new Option(longOptionName, shortOptionName, require, following);
             _options.Add(option);
         }
 
@@ -24,13 +24,45 @@ namespace HappyGetOpt
             return GetEnumerator();
         }
 
-        public void Run()
+        public static OptionCollection Parse(IEnumerable<string> args, OptionCollection options)
         {
-            var usedOptions = _options.Where(o => o.IsUsed);
-            foreach (var option in usedOptions)
+            var argsEnumerator = args.GetEnumerator();
+            
+            while (argsEnumerator.MoveNext())
             {
-                option.Run();
+                string arg = argsEnumerator.Current;
+
+                Option option = options.SingleOrDefault(o => o.Match(arg));
+
+                if (option == null)
+                {
+                    throw new OptionNotFoundException(arg);
+                }
+
+                option.IsUsed = true;
+
+                if (option.IsFollowingByValue)
+                {
+                    if (!argsEnumerator.MoveNext())
+                    {
+                        throw new ValueIsRequiredAfterOptionException(arg);
+                    }
+
+                    option.Value = argsEnumerator.Current;
+                }
+                else
+                {
+                    option.Value = string.Empty;
+                }
             }
+
+            Option missingRequiredOption = options.SingleOrDefault(o => o.IsRequired && !o.IsUsed);
+            if (missingRequiredOption != null)
+            {
+                throw new MissingRequiredOptionException(missingRequiredOption.Name);
+            }
+
+            return options;
         }
     }
 }

@@ -6,9 +6,9 @@ namespace HappyGetOpt
 {
     public class CommandCollection
     {
-        readonly IList<Command> _commands = new List<Command>();
+        readonly IList<ICommand> _commands = new List<ICommand>();
 
-        public void Add(Command command)
+        public void Add(ICommand command)
         {
             _commands.Add(command);
         }
@@ -17,15 +17,15 @@ namespace HappyGetOpt
         {
             string commandName = GetCommandName(args);
 
-            Command command = _commands.Single(c => c.Name.Equals(commandName, StringComparison.OrdinalIgnoreCase));
+            ICommand command = _commands.Single(c => c.Name.Equals(commandName, StringComparison.OrdinalIgnoreCase));
 
             if (string.IsNullOrEmpty(commandName))
             {
-                command.Run(args);
+                command.Run(OptionCollection.Parse(args, command.Options));
             }
             else
             {
-                command.Run(args.Skip(1));
+                command.Run(OptionCollection.Parse(args.Skip(1), command.Options));
             }
         }
 

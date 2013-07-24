@@ -9,108 +9,121 @@ namespace HappyGetOpt.Test
         [Test]
         public void TestShortOptionWillNoValueAfter()
         {
-            var mock = new Mock<IAction>();
-            mock.Setup(m => m.Run(string.Empty));
+            var mock = new Mock<ICommand>();
+            mock.SetupGet(c => c.Name).Returns(string.Empty);
+            mock.SetupGet(c => c.Options).Returns(new OptionCollection());
+            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
 
-            Command defaultCommand = new Command(string.Empty);
+            ICommand defaultCommand = mock.Object;
 
             CommandCollection commandCollection = new CommandCollection();
             commandCollection.Add(defaultCommand);
 
-            defaultCommand.Options.Add("help", 'h', mock.Object, OptionRequired.Optional, Following.None);
+            defaultCommand.Options.Add("help", 'h', OptionRequired.Optional, Following.None);
 
             const string args = "-h";
             commandCollection.Run(args.Split(' '));
-            mock.Verify(action => action.Run(string.Empty), Times.Exactly(1));
+
+            mock.Verify(command => command.Run(defaultCommand.Options), Times.Exactly(1));
         }
 
         [Test]
         public void TestLongOptionWillNoValueAfter()
         {
-            var mock = new Mock<IAction>();
-            mock.Setup(m => m.Run(string.Empty));
+            var mock = new Mock<ICommand>();
+            mock.SetupGet(c => c.Name).Returns(string.Empty);
+            mock.SetupGet(c => c.Options).Returns(new OptionCollection());
+            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
 
-            Command defaultCommand = new Command(string.Empty);
+            ICommand defaultCommand = mock.Object;
 
             CommandCollection commandCollection = new CommandCollection();
             commandCollection.Add(defaultCommand);
 
-            defaultCommand.Options.Add("help", 'h', mock.Object, OptionRequired.Optional, Following.None);
+            defaultCommand.Options.Add("help", 'h', OptionRequired.Optional, Following.None);
 
             const string args = "--help";
             commandCollection.Run(args.Split(' '));
-            mock.Verify(action => action.Run(string.Empty), Times.Exactly(1));
+            mock.Verify(action => action.Run(defaultCommand.Options), Times.Exactly(1));
         }
 
         [Test]
         public void TestShortOptionMustHaveValueAfter()
         {
-            var mock = new Mock<IAction>();
-            mock.Setup(m => m.Run("abc"));
+            var mock = new Mock<ICommand>();
+            mock.SetupGet(c => c.Name).Returns(string.Empty);
+            mock.SetupGet(c => c.Options).Returns(new OptionCollection());
+            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
 
-            Command defaultCommand = new Command(string.Empty);
+            ICommand defaultCommand = mock.Object;
 
             CommandCollection commandCollection = new CommandCollection();
             commandCollection.Add(defaultCommand);
 
-            defaultCommand.Options.Add("message", 'm', mock.Object, OptionRequired.Optional, Following.Value);
+            defaultCommand.Options.Add("message", 'm', OptionRequired.Optional, Following.Value);
 
             const string args = "-m abc";
             commandCollection.Run(args.Split(' '));
-            mock.Verify(action => action.Run("abc"), Times.Exactly(1));
+            mock.Verify(action => action.Run(defaultCommand.Options), Times.Exactly(1));
         }
 
         [Test]
         public void TestShortOptionValueHasSpace()
         {
-            var mock = new Mock<IAction>();
-            mock.Setup(m => m.Run("abc def"));
+            var mock = new Mock<ICommand>();
+            mock.SetupGet(c => c.Name).Returns(string.Empty);
+            mock.SetupGet(c => c.Options).Returns(new OptionCollection());
+            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
 
-            Command defaultCommand = new Command(string.Empty);
+            ICommand defaultCommand = mock.Object;
 
             CommandCollection commandCollection = new CommandCollection();
             commandCollection.Add(defaultCommand);
 
-            defaultCommand.Options.Add("message", 'm', mock.Object, OptionRequired.Optional, Following.Value);
+            defaultCommand.Options.Add("message", 'm', OptionRequired.Optional, Following.Value);
 
-            string[] args = new string[]{"-m", "\"abc def\""};
+            string[] args = new []{"-m", "\"abc def\""};
             commandCollection.Run(args);
-            mock.Verify(action => action.Run("abc def"), Times.Exactly(1));
+            mock.Verify(action => action.Run(defaultCommand.Options), Times.Exactly(1));
         }
 
         [Test]
         [ExpectedException(typeof(OptionNotFoundException))]
         public void TestShortOptionWillNotHaveValueAfterButValueExists()
         {
-            var mock = new Mock<IAction>();
-            mock.Setup(m => m.Run(string.Empty));
+            var mock = new Mock<ICommand>();
+            mock.SetupGet(c => c.Name).Returns(string.Empty);
+            mock.SetupGet(c => c.Options).Returns(new OptionCollection());
+            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
 
-            Command defaultCommand = new Command(string.Empty);
+            ICommand defaultCommand = mock.Object;
 
             CommandCollection commandCollection = new CommandCollection();
             commandCollection.Add(defaultCommand);
 
-            defaultCommand.Options.Add("message", 'm', mock.Object, OptionRequired.Optional, Following.None);
+            defaultCommand.Options.Add("message", 'm', OptionRequired.Optional, Following.None);
 
             const string args = "-m abc";
             commandCollection.Run(args.Split(' '));
-            mock.Verify(action => action.Run(string.Empty), Times.Exactly(1));
+            mock.Verify(action => action.Run(defaultCommand.Options), Times.Exactly(1));
         }
 
         [Test]
         [ExpectedException(typeof(MissingRequiredOptionException))]
         public void TestShortOptionIsRequired()
         {
-            var mock = new Mock<IAction>();
-            mock.Setup(m => m.Run(string.Empty));
+            var mock = new Mock<ICommand>();
+            mock.SetupGet(c => c.Name).Returns(string.Empty);
+            mock.SetupGet(c => c.Options).Returns(new OptionCollection());
+            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
 
-            Command defaultCommand = new Command(string.Empty);
+            ICommand defaultCommand = new AddCommand(string.Empty);
 
             CommandCollection commandCollection = new CommandCollection();
             commandCollection.Add(defaultCommand);
 
-            defaultCommand.Options.Add("message", 'm', mock.Object, OptionRequired.Required, Following.None);
-            defaultCommand.Options.Add("check", 'c', mock.Object, OptionRequired.Optional, Following.None);
+            defaultCommand.Options.Add("message", 'm', OptionRequired.Required, Following.None);
+            defaultCommand.Options.Add("check", 'c', OptionRequired.Optional, Following.None);
 
             const string args = "-c";
             commandCollection.Run(args.Split(' '));

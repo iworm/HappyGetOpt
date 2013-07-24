@@ -45,10 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command.cs" />
     <Compile Include="CommandCollection.cs" />
     <Compile Include="Following.cs" />
-    <Compile Include="IAction.cs" />
+    <Compile Include="ICommand.cs" />
     <Compile Include="MissingRequiredOptionException.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="OptionCollection.cs" />

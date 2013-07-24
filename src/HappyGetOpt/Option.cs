@@ -3,19 +3,20 @@ using System.Globalization;
 
 namespace HappyGetOpt
 {
+    public delegate void RunOptionDelegate(string value);
+
     public class Option
     {
         private readonly string _longOptionName;
         private readonly char _shortOptionName;
-        private readonly IAction _action;
+        private readonly RunOptionDelegate _action;
         private readonly OptionRequired _require;
         private readonly Following _following;
 
-        public Option(string longOptionName, char shortOptionName, IAction action, OptionRequired require, Following following)
+        public Option(string longOptionName, char shortOptionName,  OptionRequired require, Following following)
         {
             _longOptionName = longOptionName;
             _shortOptionName = shortOptionName;
-            _action = action;
             _require = require;
             _following = following;
         }
@@ -71,7 +72,7 @@ namespace HappyGetOpt
 
         public void Run()
         {
-            _action.Run(Value.Trim('\"', '\''));
+            _action(Value.Trim('\"', '\''));
         }
     }
 }
