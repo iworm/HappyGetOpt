@@ -46,7 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandCollection.cs" />
+    <Compile Include="CommandNotFoundException.cs" />
     <Compile Include="Following.cs" />
+    <Compile Include="HelpCommand.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="MissingRequiredOptionException.cs" />
     <Compile Include="Option.cs" />

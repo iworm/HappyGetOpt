@@ -7,7 +7,7 @@ namespace HappyGetOpt
 {
     public interface ICommand
     {
-        void Run(OptionCollection options);
+        bool Run(string[] args);
         string Name { get;}
         OptionCollection Options { get; }
     }

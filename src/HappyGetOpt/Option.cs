@@ -3,15 +3,13 @@ using System.Globalization;
 
 namespace HappyGetOpt
 {
-    public delegate void RunOptionDelegate(string value);
-
     public class Option
     {
         private readonly string _longOptionName;
         private readonly char _shortOptionName;
-        private readonly RunOptionDelegate _action;
         private readonly OptionRequired _require;
         private readonly Following _following;
+        private string _value;
 
         public Option(string longOptionName, char shortOptionName,  OptionRequired require, Following following)
         {
@@ -28,7 +26,11 @@ namespace HappyGetOpt
 
         public bool IsUsed { get; set; }
 
-        public string Value { get; set; }
+        public string Value
+        {
+            get { return _value.Trim('"', '\''); }
+            set { _value = value; }
+        }
 
         public string Name
         {
@@ -68,11 +70,6 @@ namespace HappyGetOpt
             }
 
             return false;
-        }
-
-        public void Run()
-        {
-            _action(Value.Trim('\"', '\''));
         }
     }
 }

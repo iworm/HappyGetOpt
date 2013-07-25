@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,7 +25,19 @@ namespace HappyGetOpt
             return GetEnumerator();
         }
 
-        public static OptionCollection Parse(IEnumerable<string> args, OptionCollection options)
+        public Option Get(string name)
+        {
+            var option = _options.SingleOrDefault(o => o.Match(name));
+
+            if (option == null)
+            {
+                throw new OptionNotFoundException(name);
+            }
+
+            return option;
+        }
+
+        public void Parse(IEnumerable<string> args)
         {
             var argsEnumerator = args.GetEnumerator();
             
@@ -32,7 +45,7 @@ namespace HappyGetOpt
             {
                 string arg = argsEnumerator.Current;
 
-                Option option = options.SingleOrDefault(o => o.Match(arg));
+                Option option = Get(arg);
 
                 if (option == null)
                 {
@@ -56,13 +69,11 @@ namespace HappyGetOpt
                 }
             }
 
-            Option missingRequiredOption = options.SingleOrDefault(o => o.IsRequired && !o.IsUsed);
+            Option missingRequiredOption = this.SingleOrDefault(o => o.IsRequired && !o.IsUsed);
             if (missingRequiredOption != null)
             {
                 throw new MissingRequiredOptionException(missingRequiredOption.Name);
             }
-
-            return options;
         }
     }
 }

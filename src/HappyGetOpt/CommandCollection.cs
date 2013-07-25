@@ -13,20 +13,30 @@ namespace HappyGetOpt
             _commands.Add(command);
         }
 
-        public void Run(string[] args)
+        public bool Run(string[] args)
         {
             string commandName = GetCommandName(args);
 
-            ICommand command = _commands.Single(c => c.Name.Equals(commandName, StringComparison.OrdinalIgnoreCase));
+            ICommand command = Get(commandName);
 
             if (string.IsNullOrEmpty(commandName))
             {
-                command.Run(OptionCollection.Parse(args, command.Options));
+                return command.Run(args);
             }
-            else
+
+            return command.Run(args.Skip(1).ToArray());
+        }
+
+        private ICommand Get(string name)
+        {
+            var command = _commands.SingleOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+            if (command == null)
             {
-                command.Run(OptionCollection.Parse(args.Skip(1), command.Options));
+                throw new CommandNotFoundException(name);
             }
+
+            return command;
         }
 
         private string GetCommandName(string[] args)

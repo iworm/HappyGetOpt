@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using Moq;
 using NUnit.Framework;
 
 namespace HappyGetOpt.Test
@@ -12,7 +13,7 @@ namespace HappyGetOpt.Test
             var mock = new Mock<ICommand>();
             mock.SetupGet(c => c.Name).Returns(string.Empty);
             mock.SetupGet(c => c.Options).Returns(new OptionCollection());
-            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
+            mock.Setup(m => m.Run(It.IsAny<string[]>()));
 
             ICommand defaultCommand = mock.Object;
 
@@ -24,7 +25,7 @@ namespace HappyGetOpt.Test
             const string args = "-h";
             commandCollection.Run(args.Split(' '));
 
-            mock.Verify(command => command.Run(defaultCommand.Options), Times.Exactly(1));
+            mock.Verify(command => command.Run(It.IsAny<string[]>()), Times.Exactly(1));
         }
 
         [Test]
@@ -33,7 +34,7 @@ namespace HappyGetOpt.Test
             var mock = new Mock<ICommand>();
             mock.SetupGet(c => c.Name).Returns(string.Empty);
             mock.SetupGet(c => c.Options).Returns(new OptionCollection());
-            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
+            mock.Setup(m => m.Run(It.IsAny<string[]>()));
 
             ICommand defaultCommand = mock.Object;
 
@@ -44,7 +45,7 @@ namespace HappyGetOpt.Test
 
             const string args = "--help";
             commandCollection.Run(args.Split(' '));
-            mock.Verify(action => action.Run(defaultCommand.Options), Times.Exactly(1));
+            mock.Verify(action => action.Run(It.IsAny<string[]>()), Times.Exactly(1));
         }
 
         [Test]
@@ -53,7 +54,7 @@ namespace HappyGetOpt.Test
             var mock = new Mock<ICommand>();
             mock.SetupGet(c => c.Name).Returns(string.Empty);
             mock.SetupGet(c => c.Options).Returns(new OptionCollection());
-            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
+            mock.Setup(m => m.Run(It.IsAny<string[]>()));
 
             ICommand defaultCommand = mock.Object;
 
@@ -64,7 +65,7 @@ namespace HappyGetOpt.Test
 
             const string args = "-m abc";
             commandCollection.Run(args.Split(' '));
-            mock.Verify(action => action.Run(defaultCommand.Options), Times.Exactly(1));
+            mock.Verify(action => action.Run(It.IsAny<string[]>()), Times.Exactly(1));
         }
 
         [Test]
@@ -73,7 +74,7 @@ namespace HappyGetOpt.Test
             var mock = new Mock<ICommand>();
             mock.SetupGet(c => c.Name).Returns(string.Empty);
             mock.SetupGet(c => c.Options).Returns(new OptionCollection());
-            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
+            mock.Setup(m => m.Run(It.IsAny<string[]>()));
 
             ICommand defaultCommand = mock.Object;
 
@@ -84,7 +85,7 @@ namespace HappyGetOpt.Test
 
             string[] args = new []{"-m", "\"abc def\""};
             commandCollection.Run(args);
-            mock.Verify(action => action.Run(defaultCommand.Options), Times.Exactly(1));
+            mock.Verify(action => action.Run(It.IsAny<string[]>()), Times.Exactly(1));
         }
 
         [Test]
@@ -94,7 +95,7 @@ namespace HappyGetOpt.Test
             var mock = new Mock<ICommand>();
             mock.SetupGet(c => c.Name).Returns(string.Empty);
             mock.SetupGet(c => c.Options).Returns(new OptionCollection());
-            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
+            mock.Setup(m => m.Run(It.IsAny<string[]>()));
 
             ICommand defaultCommand = mock.Object;
 
@@ -104,8 +105,7 @@ namespace HappyGetOpt.Test
             defaultCommand.Options.Add("message", 'm', OptionRequired.Optional, Following.None);
 
             const string args = "-m abc";
-            commandCollection.Run(args.Split(' '));
-            mock.Verify(action => action.Run(defaultCommand.Options), Times.Exactly(1));
+            defaultCommand.Options.Parse(args.Split(' '));
         }
 
         [Test]
@@ -115,9 +115,9 @@ namespace HappyGetOpt.Test
             var mock = new Mock<ICommand>();
             mock.SetupGet(c => c.Name).Returns(string.Empty);
             mock.SetupGet(c => c.Options).Returns(new OptionCollection());
-            mock.Setup(m => m.Run(It.IsAny<OptionCollection>()));
+            mock.Setup(m => m.Run(It.IsAny<string[]>()));
 
-            ICommand defaultCommand = new AddCommand(string.Empty);
+            ICommand defaultCommand = mock.Object;
 
             CommandCollection commandCollection = new CommandCollection();
             commandCollection.Add(defaultCommand);
@@ -126,7 +126,7 @@ namespace HappyGetOpt.Test
             defaultCommand.Options.Add("check", 'c', OptionRequired.Optional, Following.None);
 
             const string args = "-c";
-            commandCollection.Run(args.Split(' '));
+            defaultCommand.Options.Parse(args.Split(' '));
         }
     }
 }
