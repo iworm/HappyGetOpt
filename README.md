@@ -1,4 +1,4 @@
 HappyGetOpt
 ===========
 
-Another implementation of GNU Getopt
+A C# implementation of GNU Getopt
